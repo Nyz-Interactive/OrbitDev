@@ -4,40 +4,124 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OrbitDev - Sua carreira em órbita</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #0a0a0f;
+      font-family: Arial, sans-serif;
+      color: #e0e0ff;
+      padding: 20px;
+      margin: 0;
+    }
+   .container { max-width: 800px; margin: 0 auto; }
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      color: #6e44ff;
+      margin-bottom: 10px;
+    }
+   .subtitulo { text-align: center; color: #a0a0ff; margin-bottom: 30px; }
+    #busca {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+      border: 2px solid #6e44ff;
+      border-radius: 10px;
+      background: #1a1a2e;
+      color: white;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+   .vaga {
+      background: #1a1a2e;
+      border: 1px solid #6e44ff;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+   .vaga h2 { margin: 0 0 10px 0; color: #fff; }
+   .vaga p { margin: 5px 0; color: #b892ff; }
+   .tags { margin: 10px 0; }
+   .tag {
+      background: #6e44ff;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      margin-right: 5px;
+      display: inline-block;
+    }
+   .btn {
+      background: #ff4d8d;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+   .escondido { display: none; }
+  </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <button class="tema-btn" onclick="trocarTema()">🌙</button>
-      <h1>🚀 OrbitDev</h1>
-      <p class="subtitulo">Decolando sua primeira vaga tech</p>
-      <input type="text" class="busca" id="busca" placeholder="Buscar por React, Node, Estágio..." onkeyup="buscarVagas()">
-    </header>
+    <h1>🚀 OrbitDev</h1>
+    <p class="subtitulo">Decolando sua primeira vaga tech</p>
 
-    <div class="info-bar">
-      <span class="contador" id="contador">0 missões</span>
-      <div class="filtros">
-        <button class="btn-filtro ativo" onclick="filtrarVagas('todas')">Todas</button>
-        <button class="btn-filtro" onclick="filtrarVagas('remoto')">Remoto</button>
-        <button class="btn-filtro" onclick="filtrarVagas('estagio')">Estágio</button>
-        <button class="btn-filtro" onclick="filtrarVagas('junior')">Júnior</button>
-        <button class="btn-filtro" onclick="limparFiltros()">Limpar</button>
+    <input type="text" id="busca" placeholder="Digite React, Node, Estágio..." onkeyup="buscar()">
+
+    <div id="vagas">
+      <div class="vaga">
+        <h2>Dev Front-end Júnior</h2>
+        <p>CodeNebula Tech</p>
+        <div class="tags">
+          <span class="tag">Remoto</span>
+          <span class="tag">React</span>
+          <span class="tag">Júnior</span>
+        </div>
+        <p>Vaga pra dev React iniciante. CLT R$3.500</p>
+        <button class="btn" onclick="alert('Salvo!')">🤍 Salvar</button>
+      </div>
+
+      <div class="vaga">
+        <h2>Estágio Back-end</h2>
+        <p>RocketCode</p>
+        <div class="tags">
+          <span class="tag">Híbrido SP</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Estágio</span>
+        </div>
+        <p>Aprenda Node.js do zero. Bolsa R$1.800</p>
+        <button class="btn" onclick="alert('Salvo!')">🤍 Salvar</button>
+      </div>
+
+      <div class="vaga">
+        <h2>Full Stack Júnior</h2>
+        <p>StarCode Labs</p>
+        <div class="tags">
+          <span class="tag">Remoto</span>
+          <span class="tag">Vue.js</span>
+          <span class="tag">Python</span>
+        </div>
+        <p>Vue no front, Python no back. R$4.000</p>
+        <button class="btn" onclick="alert('Salvo!')">🤍 Salvar</button>
       </div>
     </div>
-
-    <main id="lista-vagas"></main>
-
-    <footer><p>OrbitDev © 2026 - Levando devs juniors pra órbita 🌌</p></footer>
   </div>
 
-  <div id="modal" class="modal" onclick="fecharModal()">
-    <div class="modal-conteudo" onclick="event.stopPropagation()">
-      <span class="fechar" onclick="fecharModal()">&times;</span>
-      <div id="modal-info"></div>
-    </div>
-  </div>
+  <script>
+    function buscar() {
+      var termo = document.getElementById('busca').value.toLowerCase();
+      var vagas = document.getElementsByClassName('vaga');
 
-  <script src="script.js"></script>
+      for (var i = 0; i < vagas.length; i++) {
+        var textoVaga = vagas[i].innerText.toLowerCase();
+        if (textoVaga.includes(termo)) {
+          vagas[i].classList.remove('escondido');
+        } else {
+          vagas[i].classList.add('escondido');
+        }
+      }
+    }
+  </script>
 </body>
-</html>
+    </html>
