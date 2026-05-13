@@ -26,7 +26,7 @@
     }
 
     /* FOGUETE GIGANTE COLORIDO ROXO E AZUL */
- .foguete {
+.foguete {
       display: inline-block;
       font-size: 4.5rem;
       background: linear-gradient(45deg, #6e44ff, #44d1ff, #b892ff);
@@ -38,7 +38,7 @@
     }
 
     /* TEXTO ORBITDEV GIGANTE BRILHANDO */
- .titulo {
+.titulo {
       color: #6e44ff;
       font-size: 4rem;
       text-shadow: 0 0 20px #6e44ff, 0 0 40px #44d1ff, 0 0 60px #6e44ff;
@@ -46,13 +46,13 @@
     }
 
     @keyframes pulsar {
-      0%, 100% { 
+      0%, 100% {
         filter: drop-shadow(0 0 15px #6e44ff) drop-shadow(0 0 30px #44d1ff);
-        text-shadow: 0 0 20px #6e44ff, 0 0 40px #44d1ff; 
+        text-shadow: 0 0 20px #6e44ff, 0 0 40px #44d1ff;
       }
-      50% { 
+      50% {
         filter: drop-shadow(0 0 30px #6e44ff) drop-shadow(0 0 60px #44d1ff);
-        text-shadow: 0 0 35px #6e44ff, 0 0 70px #44d1ff; 
+        text-shadow: 0 0 35px #6e44ff, 0 0 70px #44d1ff;
       }
     }
 
@@ -64,6 +64,12 @@
       font-weight: bold;
     }
 
+   .botoes-topo {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
     #busca {
       width: 100%;
       padding: 20px 25px;
@@ -72,7 +78,7 @@
       border-radius: 50px;
       background: #1a1a2e;
       color: white;
-      margin-bottom: 35px;
+      margin-bottom: 25px;
       box-sizing: border-box;
       box-shadow: 0 0 25px rgba(110, 68, 255, 0.4);
     }
@@ -122,9 +128,31 @@
       box-shadow: 0 0 20px rgba(68, 209, 255, 0.8);
       transition: 0.3s;
     }
-.btn:hover { 
-      transform: scale(1.05); 
+.btn:hover {
+      transform: scale(1.05);
       box-shadow: 0 0 35px rgba(68, 209, 255, 1);
+    }
+.btn-salvo {
+      background: #44d1ff;
+      border: 3px solid #6e44ff;
+    }
+.btn-ver {
+      background: #44d1ff;
+      border: 3px solid #6e44ff;
+      margin-bottom: 25px;
+    }
+.btn-limpar {
+      background: #ff4d6d;
+      border: 3px solid #ff8da1;
+      margin-top: 10px;
+      font-size: 1rem;
+      padding: 12px;
+    }
+.contador {
+      text-align: center;
+      color: #b892ff;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
     }
 .escondido { display: none; }
   </style>
@@ -134,10 +162,13 @@
     <h1><span class="foguete">🚀</span> <span class="titulo">OrbitDev</span></h1>
     <p class="subtitulo">Missões espaciais de programação!</p>
 
+    <button class="btn btn-ver" onclick="verSalvas()">🛰️ Ver Minhas Missões Salvas</button>
+    <p class="contador" id="contador">Você tem 0 missões salvas</p>
+
     <input type="text" id="busca" placeholder="Digite: foguete, alien, robô..." onkeyup="buscar()">
 
     <div id="vagas">
-      <div class="vaga">
+      <div class="vaga" data-nome="Piloto de Foguete">
         <h2>🛸 Piloto de Foguete</h2>
         <p>Nave CodeNebula</p>
         <div class="tags">
@@ -145,10 +176,10 @@
           <span class="tag">Roxo</span>
         </div>
         <p>Pilote um foguete roxo super veloz e desvie de asteroides!</p>
-        <button class="btn" onclick="alert('Missão salva! 💜💙')">🤍 Salvar Missão</button>
+        <button class="btn" onclick="salvarMissao('Piloto de Foguete', this)">🤍 Salvar Missão</button>
       </div>
 
-      <div class="vaga">
+      <div class="vaga" data-nome="Robô Dançarino">
         <h2>🤖 Robô Dançarino</h2>
         <p>Academia RocketCode</p>
         <div class="tags">
@@ -156,10 +187,10 @@
           <span class="tag">Azul</span>
         </div>
         <p>Ensine robôs a dançar break com luzes azuis!</p>
-        <button class="btn" onclick="alert('Missão salva! 💜💙')">🤍 Salvar Missão</button>
+        <button class="btn" onclick="salvarMissao('Robô Dançarino', this)">🤍 Salvar Missão</button>
       </div>
 
-      <div class="vaga">
+      <div class="vaga" data-nome="Caçador de Bugs">
         <h2>👾 Caçador de Bugs</h2>
         <p>Base StarCode Labs</p>
         <div class="tags">
@@ -167,25 +198,82 @@
           <span class="tag">Laser</span>
         </div>
         <p>Use laser roxo pra capturar bugs aliens que brilham!</p>
-        <button class="btn" onclick="alert('Missão salva! 💜💙')">🤍 Salvar Missão</button>
+        <button class="btn" onclick="salvarMissao('Caçador de Bugs', this)">🤍 Salvar Missão</button>
       </div>
     </div>
   </div>
 
   <script>
+    // ATUALIZA CONTADOR E BOTOES QUANDO ABRE A PÁGINA
+    document.addEventListener('DOMContentLoaded', function() {
+      atualizarInterface();
+    });
+
+    // FUNÇÃO DE BUSCA
     function buscar() {
       var termo = document.getElementById('busca').value.toLowerCase();
       var vagas = document.getElementsByClassName('vaga');
-
       for (var i = 0; i < vagas.length; i++) {
         var textoVaga = vagas[i].innerText.toLowerCase();
-        if (textoVaga.includes(termo)) {
-          vagas[i].style.display = 'block';
-        } else {
-          vagas[i].style.display = 'none';
+        vagas[i].style.display = textoVaga.includes(termo)? 'block' : 'none';
+      }
+    }
+
+    // SALVAR MISSÃO DE VERDADE
+    function salvarMissao(nomeMissao, botao) {
+      let salvas = JSON.parse(localStorage.getItem('missoesOrbitDev')) || [];
+
+      if (!salvas.includes(nomeMissao)) {
+        salvas.push(nomeMissao);
+        localStorage.setItem('missoesOrbitDev', JSON.stringify(salvas));
+
+        // Muda o botão
+        botao.innerHTML = '💙 Missão Salva!';
+        botao.classList.add('btn-salvo');
+
+        atualizarInterface();
+        alert('Missão salva na sua nave! 💜💙\n\n' + nomeMissao);
+      } else {
+        alert('Essa missão já tá na tua nave, comandante! 🚀');
+      }
+    }
+
+    // VER MISSÕES SALVAS
+    function verSalvas() {
+      let salvas = JSON.parse(localStorage.getItem('missoesOrbitDev')) || [];
+      if (salvas.length === 0) {
+        alert('Nenhuma missão salva ainda! Bora salvar uma? 🛸');
+      } else {
+        let lista = salvas.map((missao, index) => (index + 1) + '. ' + missao).join('\n');
+        let limpar = confirm('SUAS MISSÕES SALVAS: 🚀\n\n' + lista + '\n\nQuer limpar todas as missões?');
+        if (limpar) {
+          localStorage.removeItem('missoesOrbitDev');
+          atualizarInterface();
+          alert('Nave limpa! Pronto pra novas missões 💜');
         }
       }
     }
+
+    // ATUALIZA CONTADOR E COR DOS BOTÕES
+    function atualizarInterface() {
+      let salvas = JSON.parse(localStorage.getItem('missoesOrbitDev')) || [];
+
+      // Atualiza contador
+      document.getElementById('contador').innerText = `Você tem ${salvas.length} miss${salvas.length === 1? 'ão salva' : 'ões salvas'}`;
+
+      // Atualiza botões
+      let botoes = document.querySelectorAll('.vaga.btn');
+      botoes.forEach(botao => {
+        let nomeMissao = botao.parentElement.dataset.nome;
+        if (salvas.includes(nomeMissao)) {
+          botao.innerHTML = '💙 Missão Salva!';
+          botao.classList.add('btn-salvo');
+        } else {
+          botao.innerHTML = '🤍 Salvar Missão';
+          botao.classList.remove('btn-salvo');
+        }
+      });
+    }
   </script>
 </body>
-  </html>
+</html>
