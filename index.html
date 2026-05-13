@@ -13,161 +13,38 @@
       margin: 0;
     }
 
-    /* ESTRELAS CAINDO - AGORA TU VÊ */
-    body::before {
-      content: "✨ 💜 🌟 💙 ✨ 💜 🌟 💙 ✨ 💜 🌟 💙";
-      position: fixed;
-      top: -50px;
-      left: 0;
-      width: 100%;
-      font-size: 25px;
-      opacity: 0.4;
-      animation: chover 15s linear infinite;
-      z-index: -1;
-    }
-
-    @keyframes chover {
-      to { transform: translateY(110vh); }
-    }
-
 .container { max-width: 800px; margin: 0 auto; }
 
     h1 {
       text-align: center;
       font-size: 2.8rem;
-      color: #6e44ff;
       margin-bottom: 10px;
       font-weight: 800;
+    }
+
+    /* FOGUETE COLORIDO ROXO E AZUL */
+   .foguete {
+      display: inline-block;
+      background: linear-gradient(45deg, #6e44ff, #44d1ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 3.5rem;
+      filter: drop-shadow(0 0 10px #6e44ff) drop-shadow(0 0 20px #44d1ff);
+      animation: pulsar 2s ease-in-out infinite;
+    }
+
+    /* TEXTO ORBITDEV BRILHANDO */
+   .titulo {
+      color: #6e44ff;
       text-shadow: 0 0 15px #6e44ff, 0 0 30px #44d1ff;
       animation: pulsar 2s ease-in-out infinite;
     }
 
     @keyframes pulsar {
-      0%, 100% { text-shadow: 0 0 15px #6e44ff, 0 0 30px #44d1ff; }
-      50% { text-shadow: 0 0 25px #6e44ff, 0 0 50px #44d1ff; }
-    }
-
-.subtitulo {
-      text-align: center;
-      color: #44d1ff;
-      margin-bottom: 25px;
-      font-size: 1.2rem;
-    }
-
-    #busca {
-      width: 100%;
-      padding: 15px;
-      font-size: 1rem;
-      border: 3px solid #6e44ff;
-      border-radius: 50px;
-      background: #1a1a2e;
-      color: white;
-      margin-bottom: 25px;
-      box-sizing: border-box;
-    }
-
-.vaga {
-      background: #1a1a2e;
-      border: 3px solid #6e44ff;
-      border-radius: 16px;
-      padding: 20px;
-      margin: 15px 0;
-      box-shadow: 0 0 20px rgba(110, 68, 255, 0.5);
-      display: block;
-    }
-
-.vaga h2 {
-      margin: 0 0 8px 0;
-      color: #44d1ff;
-      font-size: 1.3rem;
-    }
-.vaga p { margin: 6px 0; color: #b892ff; font-size: 1rem; }
-.tags { margin: 12px 0; }
-.tag {
-      background: #6e44ff;
-      color: white;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      margin-right: 6px;
-      margin-bottom: 6px;
-      display: inline-block;
-      border: 2px solid #44d1ff;
-    }
-.btn {
-      background: #6e44ff;
-      color: white;
-      border: 2px solid #44d1ff;
-      padding: 14px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 12px;
-      font-size: 1rem;
-      font-weight: bold;
-      width: 100%;
-      display: block;
-      box-shadow: 0 0 15px rgba(68, 209, 255, 0.6);
-    }
-.escondido { display: none; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🚀 OrbitDev</h1>
-    <p class="subtitulo">Missões espaciais de programação!</p>
-
-    <input type="text" id="busca" placeholder="Digite: foguete, alien, robô..." onkeyup="buscar()">
-
-    <div id="vagas">
-      <div class="vaga">
-        <h2>🛸 Piloto de Foguete</h2>
-        <p>Nave CodeNebula</p>
-        <div class="tags">
-          <span class="tag">Espaço</span>
-          <span class="tag">Roxo</span>
-        </div>
-        <p>Pilote um foguete roxo e desvie de asteroides!</p>
-        <button class="btn" onclick="alert('Missão salva! 💜💙')">🤍 Salvar Missão</button>
-      </div>
-
-      <div class="vaga">
-        <h2>🤖 Robô Dançarino</h2>
-        <p>Academia RocketCode</p>
-        <div class="tags">
-          <span class="tag">Robôs</span>
-          <span class="tag">Azul</span>
-        </div>
-        <p>Ensine robôs a dançar com luzes azuis!</p>
-        <button class="btn" onclick="alert('Missão salva! 💜💙')">🤍 Salvar Missão</button>
-      </div>
-
-      <div class="vaga">
-        <h2>👾 Caçador de Bugs</h2>
-        <p>Base StarCode Labs</p>
-        <div class="tags">
-          <span class="tag">Alien</span>
-          <span class="tag">Laser</span>
-        </div>
-        <p>Use laser roxo pra capturar bugs aliens!</p>
-        <button class="btn" onclick="alert('Missão salva! 💜💙')">🤍 Salvar Missão</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function buscar() {
-      var termo = document.getElementById('busca').value.toLowerCase();
-      var vagas = document.getElementsByClassName('vaga');
-
-      for (var i = 0; i < vagas.length; i++) {
-        var textoVaga = vagas[i].innerText.toLowerCase();
-        if (textoVaga.includes(termo)) {
-          vagas[i].style.display = 'block';
-        } else {
-          vagas[i].style.display = 'none';
-        }
+      0%, 100% { 
+        filter: drop-shadow(0 0 10px #6e44ff) drop-shadow(0 0 20px #44d1ff);
+        text-shadow: 0 0 15px #6e44ff, 0 0 30px #44d1ff; 
       }
-    }
-  </script>
-</body>
-  </html>
+      50% { 
+        filter: drop-shadow(0 0 20px #6e44ff) drop-shadow(
