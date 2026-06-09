@@ -1,0 +1,758 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+<title>SSM Code</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:monospace}
+body{background:#0D0D1A;color:#D4D4D4;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+.estrelas{position:fixed;inset:0;pointer-events:none;z-index:1}
+.estrela{
+position:absolute;
+background:#fff;
+border-radius:50%;
+animation:cair linear infinite;
+box-shadow:0 0 4px #fff;
+opacity:0.6;
+}
+@keyframes cair{
+0%{transform:translateY(-10px);opacity:0}
+10%,90%{opacity:0.6}
+100%{transform:translateY(100vh);opacity:0}
+}
+
+.topo{background:#1A1A2E;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2D2D44;position:relative;z-index:10}
+.topo-esq{display:flex;align-items:center;gap:12px}
+#btnMenu{background:#2D2D44;color:#fff;border:none;border-radius:6px;padding:8px;font-size:16px;cursor:pointer}
+.logo{display:flex;align-items:center;gap:8px;position:relative}
+.logo-lua{font-size:22px;animation:brilhar 2s ease-in-out infinite}
+@keyframes brilhar{
+0%,100%{opacity:1;transform:scale(1)}
+50%{opacity:0.7;transform:scale(1.15)}
+}
+
+/* LED NO NOME SSM CODE */
+.logo-nome{
+color:#7B68EE;
+font-family:'Segoe UI', 'Arial Black', sans-serif;
+font-size:20px;
+font-weight:900;
+letter-spacing:1px;
+text-shadow:
+0 0 5px #7B68EE,
+0 0 10px #7B68EE,
+0 0 20px #7B68EE,
+0 0 40px #7B68EE;
+animation:led-texto 1.5s ease-in-out infinite;
+}
+@keyframes led-texto{
+0%,100%{
+text-shadow:
+0 0 5px #7B68EE,
+0 0 10px #7B68EE,
+0 0 20px #7B68EE,
+0 0 40px #7B68EE;
+}
+50%{
+text-shadow:
+0 0 10px #7B68EE,
+0 0 20px #7B68EE,
+0 0 30px #7B68EE,
+0 0 60px #9B88FF,
+0 0 80px #7B68EE;
+}
+}
+
+.logo-texto span{display:block;font-size:10px;color:#888;font-weight:400}
+
+.botoes{display:flex;gap:6px}
+.btn-topo{background:#2D2D44;color:#fff;border:none;border-radius:6px;padding:8px 12px;font-size:16px;cursor:pointer}
+.btn-play{background:#00C853;color:#fff;font-size:13px;font-weight:700;padding:8px 16px}
+.btn-globo{background:#0099FF}
+.btn-delete{background:#F44747}
+.btn-novo{background:#7B68EE}
+
+.container{flex:1;display:flex;position:relative;z-index:5;overflow:hidden}
+
+.sidebar{
+width:260px;
+background:#16162A;
+border-right:1px solid #2D2D44;
+display:flex;
+flex-direction:column;
+position:absolute;
+left:0;
+top:0;
+height:100%;
+z-index:15;
+transform:translateX(-100%);
+transition:transform 0.3s;
+}
+.sidebar.aberta{transform:translateX(0)}
+.sidebar-topo{padding:12px;border-bottom:1px solid #2D2D44;font-size:12px;color:#888;font-weight:600}
+
+/* MINHOCA DE LED ARRODEANDO */
+.aviso-beta{
+background:#2D2D44;
+border-radius:8px;
+padding:12px;
+margin:8px 12px;
+font-size:11px;
+color:#7B68EE;
+text-align:center;
+position:relative;
+overflow:hidden;
+}
+.aviso-beta::before{
+content:'';
+position:absolute;
+inset:-2px;
+background:linear-gradient(90deg, transparent, #7B68EE, transparent);
+border-radius:8px;
+animation:minhoca 3s linear infinite;
+}
+@keyframes minhoca{
+0%{transform:translateX(-100%) rotate(0deg)}
+100%{transform:translateX(100%) rotate(360deg)}
+}
+.aviso-beta::after{
+content:'';
+position:absolute;
+inset:2px;
+background:#2D2D44;
+border-radius:6px;
+z-index:1;
+}
+.aviso-beta b{
+display:block;
+margin-bottom:4px;
+font-size:12px;
+color:#fff;
+position:relative;
+z-index:2;
+}
+.aviso-beta span{
+position:relative;
+z-index:2;
+}
+
+.btn-config-menu{
+width:calc(100% - 24px);
+background:#2D2D44;
+color:#FF9800;
+border-radius:6px;
+padding:10px;
+font-size:14px;
+font-weight:700;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+margin:8px 12px;
+position:relative;
+overflow:hidden;
+border:none;
+}
+.btn-config-menu::before{
+content:'';
+position:absolute;
+inset:-2px;
+background:linear-gradient(90deg, transparent, #FF9800, transparent);
+border-radius:8px;
+animation:minhoca 3s linear infinite;
+}
+.btn-config-menu::after{
+content:'';
+position:absolute;
+inset:2px;
+background:#2D2D44;
+border-radius:4px;
+z-index:1;
+}
+.btn-config-menu span{
+position:relative;
+z-index:2;
+}
+.btn-config-menu:hover::after{background:#3D3D54}
+
+.btn-salvar-projeto{
+width:calc(100% - 24px);
+background:#7B68EE;
+color:#fff;
+border-radius:6px;
+padding:10px;
+font-size:14px;
+font-weight:700;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+margin:0 12px 8px 12px;
+position:relative;
+overflow:hidden;
+border:none;
+}
+.btn-salvar-projeto::before{
+content:'';
+position:absolute;
+inset:-2px;
+background:linear-gradient(90deg, transparent, #7B68EE, transparent);
+border-radius:8px;
+animation:minhoca 3s linear infinite;
+}
+.btn-salvar-projeto::after{
+content:'';
+position:absolute;
+inset:2px;
+background:#7B68EE;
+border-radius:4px;
+z-index:1;
+}
+.btn-salvar-projeto span{
+position:relative;
+z-index:2;
+}
+.btn-salvar-projeto:hover::after{background:#6A5ACD}
+
+.lista-arquivos{flex:1;overflow-y:auto;padding:8px 0}
+.pasta{padding:6px 12px;font-size:12px;color:#888}
+.arquivo{padding:8px 12px 8px 32px;font-size:13px;color:#CCC;display:flex;align-items:center;gap:8px;cursor:pointer;border-left:3px solid transparent}
+.arquivo:hover{background:#1F1F3A}
+.arquivo.ativo{background:#1F1F3A;border-left-color:#7B68EE;color:#fff}
+.arquivo-icone{width:16px;height:16px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.icone-html{background:#E34C26;color:#fff}
+.icone-css{background:#264DE4;color:#fff}
+.icone-js{background:#F7DF1E;color:#000}
+
+.area-principal{flex:1;display:flex;flex-direction:column;position:relative}
+
+.abas{display:flex;background:#1A1A2E;border-bottom:1px solid #2D2D44}
+.aba{padding:10px 16px;font-size:13px;color:#fff;background:#0D0D1A;border-bottom:2px solid #7B68EE}
+
+.area-editor{flex:1;display:flex}
+.editor-wrap{flex:1;display:flex;background:#0D0D1A;overflow:hidden}
+.linhas{
+width:50px;
+background:#16162A;
+color:#858585;
+text-align:right;
+padding:12px 8px;
+font-size:14px;
+line-height:1.5;
+user-select:none;
+overflow-y:hidden;
+border-right:1px solid #2D2D44;
+white-space:pre;
+}
+.editor{flex:1;background:#0D0D1A;color:#D4D4D4;border:none;outline:none;padding:12px;font-size:14px;line-height:1.5;resize:none;tab-size:2;display:none}
+.editor.ativo{display:block}
+
+.area-preview{position:absolute;inset:0;background:#0D0D1A;display:none;z-index:20;flex-direction:column}
+.area-preview.ativo{display:flex}
+.preview-topo{background:#1A1A2E;padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
+.preview-topo span{color:#fff;font-size:13px}
+#btnFechar{background:#F44747;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:14px;font-weight:700;cursor:pointer}
+#preview{width:100%;flex:1;border:none;background:#0D0D1A}
+
+.barra-status{
+background:#7B68EE;
+padding:4px 12px;
+font-size:12px;
+display:flex;
+justify-content:space-between;
+color:#fff;
+position:relative;
+overflow:hidden;
+}
+.barra-status.texto{position:relative;z-index:2}
+.neve-status{
+position:absolute;
+inset:0;
+pointer-events:none;
+z-index:1;
+}
+.ponto-neve{
+position:absolute;
+background:#fff;
+border-radius:50%;
+opacity:0.7;
+animation:cair-neve linear infinite;
+}
+@keyframes cair-neve{
+0%{transform:translateY(-10px);opacity:0}
+10%{opacity:0.7}
+90%{opacity:0.7}
+100%{transform:translateY(25px);opacity:0}
+}
+
+.overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+z-index:12;
+display:none;
+}
+.overlay.ativo{display:block}
+
+.menu-config{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(0.9);
+background:#16162A;
+border:1px solid #2D2D44;
+border-radius:12px;
+padding:20px;
+width:320px;
+z-index:25;
+display:none;
+box-shadow:0 8px 32px rgba(0,0,0,0.5);
+opacity:0;
+transition:all 0.2s;
+max-height:80vh;
+overflow-y:auto;
+}
+.menu-config.ativo{
+display:block;
+opacity:1;
+transform:translate(-50%,-50%) scale(1);
+}
+.menu-config h3{
+color:#7B68EE;
+margin-bottom:16px;
+font-size:16px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+.config-section{
+margin-bottom:20px;
+padding-bottom:20px;
+border-bottom:1px solid #2D2D44;
+}
+.config-section:last-child{
+border-bottom:none;
+margin-bottom:0;
+padding-bottom:0;
+}
+.config-section h4{
+font-size:13px;
+color:#7B68EE;
+margin-bottom:12px;
+}
+.config-item{
+margin-bottom:12px;
+}
+.config-item label{
+display:block;
+font-size:12px;
+color:#888;
+margin-bottom:6px;
+}
+.config-item select{
+width:100%;
+background:#0D0D1A;
+color:#D4D4D4;
+border:1px solid #2D2D44;
+border-radius:6px;
+padding:8px;
+font-size:13px;
+font-family:monospace;
+}
+.btn-fechar-config{
+width:100%;
+background:#7B68EE;
+color:#fff;
+border:none;
+border-radius:6px;
+padding:10px;
+font-weight:700;
+cursor:pointer;
+margin-top:8px;
+}
+</style>
+</head>
+<body>
+
+<div class="estrelas" id="estrelas"></div>
+
+<div class="topo">
+<div class="topo-esq">
+<button id="btnMenu">☰</button>
+<div class="logo">
+<div class="logo-lua">🌙</div>
+<div class="logo-texto">
+<span class="logo-nome">𝗦𝗦𝗠 𝗖𝗼𝗱𝗲</span>
+<span>Star Space Moon</span>
+</div>
+</div>
+</div>
+<div class="botoes">
+<button class="btn-topo btn-novo" id="btnNovo">+</button>
+<button class="btn-topo btn-delete" id="btnDelete">♲</button>
+<button class="btn-topo btn-globo" id="btnGlobo">☾</button>
+<button class="btn-topo btn-play" id="btnPlay">▶</button>
+</div>
+</div>
+
+<div class="container">
+<div class="sidebar" id="sidebar">
+<div class="sidebar-topo">ARQUIVOS</div>
+
+<div class="aviso-beta">
+<b>🔧 MANUTENÇÃO</b>
+<span>v13.6</span>
+</div>
+
+<button class="btn-config-menu" id="btnConfig"><span>⏣ Configurações</span></button>
+<button class="btn-salvar-projeto" id="btnSalvarProjeto"><span>💾 Salvar Projeto</span></button>
+
+<div class="lista-arquivos">
+<div class="pasta">▼ Projeto</div>
+<div class="arquivo" data-tipo="gamejs">
+<div class="arquivo-icone icone-js">JS</div>
+game.js
+</div>
+<div class="arquivo ativo" data-tipo="html">
+<div class="arquivo-icone icone-html">5</div>
+index.html
+</div>
+<div class="arquivo" data-tipo="inputjs">
+<div class="arquivo-icone icone-js">JS</div>
+input.js
+</div>
+<div class="arquivo" data-tipo="renderjs">
+<div class="arquivo-icone icone-js">JS</div>
+render.js
+</div>
+<div class="arquivo" data-tipo="css">
+<div class="arquivo-icone icone-css">3</div>
+style.css
+</div>
+</div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="area-principal">
+<div class="abas">
+<div class="aba" id="abaAtual">index.html</div>
+</div>
+
+<div class="area-editor">
+<div class="editor-wrap">
+<div class="linhas" id="linhas"></div>
+<textarea class="editor ativo" id="editorHTML" spellcheck="false"><!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SSM Code</title>
+</head>
+<body>
+<h1>🌙 Space funcionou!</h1>
+<canvas id="game"></canvas>
+<p id="status">Aperte WASD</p>
+</body>
+</html></textarea>
+<textarea class="editor" id="editorCSS" spellcheck="false">body{
+background:#0D0D1A;
+color:#7B68EE;
+font-family:system-ui;
+padding:20px;
+text-align:center;
+}
+h1{
+text-shadow:0 0 20px #7B68EE;
+margin-bottom:20px;
+}
+canvas{
+border:3px solid #7B68EE;
+border-radius:8px;
+background:#16162A;
+display:block;
+margin:0 auto;
+}</textarea>
+<textarea class="editor" id="editorGAMEJS" spellcheck="false">// game.js
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+canvas.width = 400;
+canvas.height = 400;
+
+let x = 200;
+let y = 200;
+
+function draw(){
+ctx.fillStyle = '#16162A';
+ctx.fillRect(0, 0, 400, 400);
+ctx.fillStyle = '#00C853';
+ctx.fillRect(x, y, 20, 20);
+}
+draw();</textarea>
+<textarea class="editor" id="editorINPUTJS" spellcheck="false">// input.js
+document.addEventListener('keydown', (e) => {
+const k = e.key.toLowerCase();
+if(k === 'w') y -= 20;
+if(k === 's') y += 20;
+if(k === 'a') x -= 20;
+if(k === 'd') x += 20;
+draw();
+});</textarea>
+<textarea class="editor" id="editorRENDERJS" spellcheck="false">// render.js
+// Já desenhando no game.js</textarea>
+</div>
+</div>
+
+<div class="area-preview" id="areaPreview">
+<div class="preview-topo">
+<span>🌐 Preview</span>
+<button id="btnFechar">✕ Fechar</button>
+</div>
+<iframe id="preview"></iframe>
+</div>
+</div>
+</div>
+
+<div class="barra-status">
+<div class="neve-status" id="neveStatus"></div>
+<div class="texto" id="status">index.html</div>
+<div class="texto" id="salvo">Auto-salvando</div>
+</div>
+
+<!-- MENU CONFIGURAÇÕES -->
+<div class="menu-config" id="menuConfig">
+<h3>⏣ Configurações</h3>
+<div class="config-section">
+<h4>Aparência</h4>
+<div class="config-item">
+<label>Tema</label>
+<select id="selectTema">
+<option value="roxo">Roxo Lunar 🌙</option>
+<option value="azul">Azul Espacial 🔵</option>
+<option value="verde">Verde Matrix 🟢</option>
+<option value="rosa">Rosa Nebulosa 🩷</option>
+</select>
+</div>
+<div class="config-item">
+<label>Tamanho Fonte</label>
+<select id="selectFonte">
+<option value="12">12px</option>
+<option value="14" selected>14px</option>
+<option value="16">16px</option>
+<option value="18">18px</option>
+</select>
+</div>
+</div>
+
+<div class="config-section">
+<h4>Idioma</h4>
+<div class="config-item">
+<select id="selectIdioma">
+<option value="pt">Português BR</option>
+<option value="en">English</option>
+<option value="es">Español</option>
+</select>
+</div>
+</div>
+
+<button class="btn-fechar-config" id="btnFecharConfig">Salvar</button>
+</div>
+
+<script>
+// Estrelas fundo
+const estrelasDiv = document.getElementById('estrelas');
+for(let i=0;i<60;i++){
+let e = document.createElement('div');
+e.className = 'estrela';
+e.style.left = Math.random()*100 + '%';
+e.style.width = e.style.height = Math.random()*2+1 + 'px';
+e.style.animationDuration = Math.random()*4+3 + 's';
+e.style.animationDelay = Math.random()*5 + 's';
+estrelasDiv.appendChild(e);
+}
+
+// NEVE NA BARRA ROXA
+const neveStatus = document.getElementById('neveStatus');
+for(let i=0;i<20;i++){
+let p = document.createElement('div');
+p.className = 'ponto-neve';
+p.style.left = Math.random()*100 + '%';
+p.style.width = p.style.height = Math.random()*2+1 + 'px';
+p.style.animationDuration = Math.random()*2+1 + 's';
+p.style.animationDelay = Math.random()*2 + 's';
+neveStatus.appendChild(p);
+}
+
+// Sistema
+let codigo = JSON.parse(localStorage.getItem('ssmcode') || '{}');
+let config = JSON.parse(localStorage.getItem('ssmconfig') || '{"tema":"roxo","idioma":"pt","fonte":"14"}');
+
+const arquivos = {
+html: document.getElementById('editorHTML'),
+css: document.getElementById('editorCSS'),
+gamejs: document.getElementById('editorGAMEJS'),
+inputjs: document.getElementById('editorINPUTJS'),
+renderjs: document.getElementById('editorRENDERJS')
+};
+
+Object.keys(arquivos).forEach(k => {
+if(codigo[k]) arquivos[k].value = codigo[k];
+});
+
+let arquivoAtual = 'html';
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const menuConfig = document.getElementById('menuConfig');
+
+function aplicarConfig(){
+const cores = {
+roxo: '#7B68EE',
+azul: '#0099FF',
+verde: '#00C853',
+rosa: '#FF6B9D'
+};
+document.querySelector('.barra-status').style.background = cores[config.tema] || '#7B68EE';
+document.querySelectorAll('.editor').forEach(e => e.style.fontSize = (config.fonte || '14') + 'px');
+document.getElementById('selectTema').value = config.tema || 'roxo';
+document.getElementById('selectIdioma').value = config.idioma || 'pt';
+document.getElementById('selectFonte').value = config.fonte || '14';
+}
+aplicarConfig();
+
+function atualizarLinhas(){
+const ed = arquivos[arquivoAtual];
+const num = ed.value.split('\n').length;
+let txt = '';
+for(let i=1;i<=num;i++) txt += i + '\n';
+document.getElementById('linhas').textContent = txt;
+}
+atualizarLinhas();
+
+// MENU
+document.getElementById('btnMenu').onclick = () => {
+sidebar.classList.toggle('aberta');
+overlay.classList.toggle('ativo');
+};
+
+overlay.onclick = () => {
+sidebar.classList.remove('aberta');
+overlay.classList.remove('ativo');
+menuConfig.classList.remove('ativo');
+};
+
+// Botões
+document.getElementById('btnPlay').onclick = abrirPreview;
+document.getElementById('btnFechar').onclick = fecharPreview;
+document.getElementById('btnDelete').onclick = deletarTudo;
+
+// CONFIGURAÇÕES
+document.getElementById('btnConfig').onclick = () => {
+menuConfig.classList.add('ativo');
+overlay.classList.add('ativo');
+};
+
+document.getElementById('btnFecharConfig').onclick = () => {
+config.tema = document.getElementById('selectTema').value;
+config.idioma = document.getElementById('selectIdioma').value;
+config.fonte = document.getElementById('selectFonte').value;
+localStorage.setItem('ssmconfig', JSON.stringify(config));
+aplicarConfig();
+menuConfig.classList.remove('ativo');
+overlay.classList.remove('ativo');
+};
+
+// SALVAR PROJETO
+document.getElementById('btnSalvarProjeto').onclick = () => {
+salvar();
+let h = arquivos.html.value;
+let c = arquivos.css.value;
+let g = arquivos.gamejs.value;
+let i = arquivos.inputjs.value;
+let r = arquivos.renderjs.value;
+let final = h.replace('</head>',`<style>${c}</style></head>`);
+final = final.replace('</body>',`<script>${g}<\/script><script>${i}<\/script><script>${r}<\/script></body>`);
+const blob = new Blob([final], {type: 'text/html'});
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = 'ssm-projeto.html';
+a.click();
+URL.revokeObjectURL(url);
+};
+
+// GLOBO = PREVIEW
+document.getElementById('btnGlobo').onclick = () => {
+abrirPreview();
+};
+
+// + NOVO
+document.getElementById('btnNovo').onclick = () => {
+alert('Sistema de criar arquivo novo vem na próxima versão CEO!');
+};
+
+// Trocar arquivo
+document.querySelectorAll('.arquivo').forEach(el => {
+el.onclick = () => {
+salvar();
+arquivoAtual = el.dataset.tipo;
+document.querySelectorAll('.arquivo').forEach(a => a.classList.remove('ativo'));
+el.classList.add('ativo');
+Object.values(arquivos).forEach(e => e.classList.remove('ativo'));
+arquivos[arquivoAtual].classList.add('ativo');
+const nomes = {html:'index.html',css:'style.css',gamejs:'game.js',inputjs:'input.js',renderjs:'render.js'};
+document.getElementById('status').textContent = nomes[arquivoAtual];
+document.getElementById('abaAtual').textContent = nomes[arquivoAtual];
+atualizarLinhas();
+sidebar.classList.remove('aberta');
+overlay.classList.remove('ativo');
+};
+});
+
+// Digitar
+Object.values(arquivos).forEach(ed => {
+ed.oninput = () => {
+salvar();
+atualizarLinhas();
+};
+ed.onscroll = () => {
+document.getElementById('linhas').scrollTop = ed.scrollTop;
+};
+});
+
+function salvar(){
+Object.keys(arquivos).forEach(k => codigo[k] = arquivos[k].value);
+localStorage.setItem('ssmcode', JSON.stringify(codigo));
+document.getElementById('salvo').textContent = 'Salvo ✓';
+setTimeout(() => document.getElementById('salvo').textContent = 'Auto-salvando', 800);
+}
+
+function abrirPreview(){
+salvar();
+document.getElementById('areaPreview').classList.add('ativo');
+let h = arquivos.html.value;
+let c = arquivos.css.value;
+let g = arquivos.gamejs.value;
+let i = arquivos.inputjs.value;
+let r = arquivos.renderjs.value;
+let final = h.replace('</head>',`<style>${c}</style></head>`);
+final = final.replace('</body>',`<script>${g}<\/script><script>${i}<\/script><script>${r}<\/script></body>`);
+document.getElementById('preview').srcdoc = final;
+}
+
+function fecharPreview(){
+document.getElementById('areaPreview').classList.remove('ativo');
+}
+
+function deletarTudo(){
+if(confirm('Apagar tudo?')){
+Object.values(arquivos).forEach(e => e.value = '');
+salvar();
+atualizarLinhas();
+}
+}
+</script>
+</body>
+</html>
